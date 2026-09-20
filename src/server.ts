@@ -46,6 +46,7 @@ async function body(req: IncomingMessage): Promise<unknown> {
 
 function peerHash(req: IncomingMessage): string | undefined {
   const socket = req.socket as TLSSocket;
+  if (!socket.authorized) return undefined;
   const cert = socket.getPeerCertificate(true);
   return cert?.raw?.length ? certificateHashFromRaw(cert.raw) : undefined;
 }
@@ -93,7 +94,7 @@ export function createSecureServerRuntime(config: SecureServerConfig, handler: P
   const ws = new WebSocketServer({ server: rest });
   ws.on("connection", (socket, request) => {
     const cert = (request.socket as TLSSocket).getPeerCertificate(true);
-    const certHash = cert?.raw?.length ? certificateHashFromRaw(cert.raw) : undefined;
+    const certHash = (request.socket as TLSSocket).authorized && cert?.raw?.length ? certificateHashFromRaw(cert.raw) : undefined;
     socket.on("message", async data => {
       if (!certHash) return socket.close(1008, "mTLS certificate required");
       try {
