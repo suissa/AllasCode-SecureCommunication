@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
 
-export type CryptoCategory = "transport" | "identity" | "proof" | "payload" | "keyDerivation";
+export type CryptoCategory = "transport" | "identity" | "pqcKem" | "pqcSignature" | "proof" | "payload" | "keyDerivation";
 export type AlgorithmRegistry = Record<CryptoCategory, string>;
 
 export interface CapabilityDescriptor {
@@ -32,6 +32,7 @@ export interface SecureServerConfig {
   algorithms?: Partial<AlgorithmRegistry>;
   channels?: { linearAutodestroy?: boolean };
   jwt?: { enabled: boolean; issuer?: string; audience?: string };
+  pqc?: { required?: boolean; provider?: "liboqs.rs" };
   capabilities: CapabilityDescriptor[];
   identityProvider: IdentityProvider;
   eventStore?: EventStore;
@@ -41,6 +42,8 @@ export interface SecurityPolicy {
   readonly mtlsRequired: true;
   readonly dpopRequired: true;
   readonly jwtEnabled: boolean;
+  readonly pqcRequired: true;
+  readonly pqcProvider: "liboqs.rs";
   readonly algorithms: AlgorithmRegistry;
   readonly channels: { linearAutodestroy: boolean };
 }
@@ -52,6 +55,8 @@ export interface EventStore {
 const defaults: AlgorithmRegistry = {
   transport: "TLS_AES_256_GCM_SHA384",
   identity: "X25519MLKEM768",
+  pqcKem: "ML-KEM-768",
+  pqcSignature: "ML-DSA-65",
   proof: "Ed25519",
   payload: "XChaCha20-Poly1305",
   keyDerivation: "HKDF-SHA256",
@@ -66,6 +71,8 @@ export function resolveSecurityPolicy(config: SecureServerConfig): SecurityPolic
     mtlsRequired: true,
     dpopRequired: true,
     jwtEnabled: config.jwt?.enabled === true,
+    pqcRequired: true,
+    pqcProvider: config.pqc?.provider ?? "liboqs.rs",
     algorithms,
     channels: { linearAutodestroy: config.channels?.linearAutodestroy !== false },
   };
