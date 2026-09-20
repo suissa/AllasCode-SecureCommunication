@@ -115,7 +115,9 @@ export function createSecureServerRuntime(config: SecureServerConfig, handler: P
     Prompt: async (call: grpc.ServerUnaryCall<PromptEnvelope, PromptResult>, callback: grpc.sendUnaryData<PromptResult>) => {
       try {
         const metadata = call.metadata.get("x-extreme-zt-auth");
-        const certHash = String(metadata[0] ?? "");
+        const peerCertificate = call.getAuthContext().sslPeerCertificate;
+        const certHash = peerCertificate?.raw?.length ? certificateHashFromRaw(peerCertificate.raw) : "";
+        if (!certHash) throw new Error("Authorized mTLS certificate is required");
         const envelope = call.request as unknown as PromptEnvelope;
         const result = await handlePrompt(envelope, { agentId: String(metadata[1] ?? "mtls-agent"), certificateHash: certHash, transport: "grpc" });
         const headers = new grpc.Metadata(); headers.set("X-eXtreme-Zero-Trust", certHash); call.sendMetadata(headers); callback(null, { ...result });
