@@ -9,7 +9,7 @@
   "files": ["dist", "README.md", "LICENSE"],
   "scripts": {"build":"tsc -p tsconfig.json","typecheck":"tsc --noEmit","test":"vitest run","verify":"npm run typecheck && npm run build && npm test"},
   "engines": {"node": ">=18"},
-  "devDependencies": {"@types/node":"^22.10.0","typescript":"^5.6.3","vitest":"^2.1.8"},
+  "devDependencies": {"@types/node":"^22.10.0","typescript":"^5.6.3","vitest":"^5.0.1"},
   "keywords":["mtls","dpop","rfc9449","hybrid-encryption","webcrypto","websocket","rest"],
   "license":"MIT"
 }
