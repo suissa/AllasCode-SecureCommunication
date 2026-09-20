@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { certificateHashFromRaw, resolveSecurityPolicy } from "../src/server-config.js";
+import { libOqsBackend } from "../src/pqc.js";
 
 describe("secure server policy", () => {
   it("keeps mTLS and DPoP mandatory while allowing JWT as an addition", () => {
@@ -19,5 +20,9 @@ describe("secure server policy", () => {
     expect(certificateHashFromRaw(Buffer.from("certificate"))).toBe(
       "03d66dd08835c1ca3f128cceacd1f31ac94163096b20f445ae84285bc0832d72",
     );
+  });
+
+  it("selects liboqs with standardized ML-KEM and ML-DSA defaults", () => {
+    expect(libOqsBackend()).toMatchObject({ provider: "liboqs.rs", kem: "ML-KEM-768", signature: "ML-DSA-65" });
   });
 });
