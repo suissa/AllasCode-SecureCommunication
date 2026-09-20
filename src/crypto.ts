@@ -15,7 +15,7 @@ export function base64UrlToBytes(value: string): Uint8Array {
 }
 export function utf8(value: string): Uint8Array { return new TextEncoder().encode(value); }
 export function randomBytes(length = 32): Uint8Array {
-  if (!Number.isInteger(length) || length < 16) throw new Error("random length must be >= 16");
+  if (!Number.isInteger(length) || length < 1) throw new Error("random length must be positive");
   return cryptoApi.getRandomValues(new Uint8Array(length));
 }
 export async function sha256(value: string | BufferSource): Promise<Uint8Array> {
