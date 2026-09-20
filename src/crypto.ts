@@ -7,7 +7,7 @@ export const cryptoApi: Crypto = (() => {
 export function bytesToBase64Url(bytes: Uint8Array): string {
   let binary = "";
   for (const byte of bytes) binary += String.fromCharCode(byte);
-  return btoa(binary).replace(/\\+/g, "-").replace(/\\//g, "_").replace(/=+$/g, "");
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 }
 export function base64UrlToBytes(value: string): Uint8Array {
   const normalized = value.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((value.length + 3) % 4);
@@ -19,7 +19,8 @@ export function randomBytes(length = 32): Uint8Array {
   return cryptoApi.getRandomValues(new Uint8Array(length));
 }
 export async function sha256(value: string | BufferSource): Promise<Uint8Array> {
-  return new Uint8Array(await cryptoApi.subtle.digest("SHA-256", value));
+  const input = typeof value === "string" ? utf8(value) as BufferSource : value;
+  return new Uint8Array(await cryptoApi.subtle.digest("SHA-256", input));
 }
 export async function hkdf(ikm: BufferSource, salt: BufferSource, info: BufferSource, length = 32): Promise<Uint8Array> {
   const key = await cryptoApi.subtle.importKey("raw", ikm, "HKDF", false, ["deriveBits"]);
