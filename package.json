@@ -1,15 +1,16 @@
 {
   "name": "@allascode.institute/secure-communication",
-  "version": "0.1.0",
-  "description": "Transport-agnostic mTLS, DPoP and hybrid application-layer encryption for REST, WebSocket and custom protocols.",
+  "version": "0.2.0",
+  "description": "Transport-agnostic mTLS, DPoP and hybrid application-layer encryption with REST, WebSocket and gRPC agent communication.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
-  "files": ["dist", "README.md", "LICENSE"],
-  "scripts": {"build":"tsc -p tsconfig.json","typecheck":"tsc --noEmit","test":"vitest run","verify":"npm run typecheck && npm run build && npm test"},
-  "engines": {"node": ">=18"},
-  "devDependencies": {"@types/node":"^22.10.0","typescript":"^5.6.3","vitest":"^2.1.8"},
-  "keywords":["mtls","dpop","rfc9449","hybrid-encryption","webcrypto","websocket","rest"],
-  "license":"MIT"
+  "files": ["dist", "proto", "README.md", "LICENSE"],
+  "scripts": { "build": "tsc -p tsconfig.json", "typecheck": "tsc --noEmit", "test": "vitest run", "verify": "npm run typecheck && npm run build && npm test" },
+  "engines": { "node": ">=20" },
+  "dependencies": { "@grpc/grpc-js": "^1.12.4", "@grpc/proto-loader": "^0.7.13", "ws": "^8.18.0" },
+  "devDependencies": { "@types/node": "^22.10.0", "@types/ws": "^8.5.13", "typescript": "^5.6.3", "vitest": "^2.1.8" },
+  "keywords": ["mtls", "dpop", "rfc9449", "hybrid-encryption", "websocket", "grpc", "event-sourcing", "mcp"],
+  "license": "MIT"
 }
