@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package allascode;
+
+service SecureCommunication {
+  rpc Prompt (PromptEnvelope) returns (PromptResult);
+}
+
+message PromptEnvelope {
+  string intent = 1;
+  string input_json = 2;
+  string correlation_id = 3;
+  string requested_at = 4;
+}
+
+message PromptResult {
+  string event_id = 1;
+  string intent = 2;
+  bool accepted = 3;
+  string output_json = 4;
+}

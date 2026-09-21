@@ -1,7 +1,7 @@
 {
   "name": "@allascode.institute/secure-communication",
-  "version": "0.1.0",
-  "description": "Transport-agnostic mTLS, DPoP and hybrid application-layer encryption for REST, WebSocket and custom protocols.",
+  "version": "0.2.0",
+  "description": "Transport-agnostic mTLS, DPoP and hybrid application-layer encryption with REST, WebSocket and gRPC agent communication.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
